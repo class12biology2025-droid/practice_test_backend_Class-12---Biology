@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Class 12 Practice Test</title>
+<title>Class 12 biology Practice Test</title>
 <style>
 /* ==== YOUR ORIGINAL STYLE (unchanged) ==== */
 body {
@@ -196,6 +197,53 @@ select option:nth-child(even){background-color:#e8f4ff;}
 select option:nth-child(odd){background-color:#fff;}
 .hidden{display:none;}
 .inline-topic{display:flex;align-items:center;gap:4px;margin-left:auto;font-size:12px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.register-btn{
+  display:inline-block;
+  padding:10px 16px;
+  background:linear-gradient(135deg, #ff9800, #f57c00);
+  color:white;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 4px 8px rgba(0,0,0,0.2);
+  transition:0.3s;
+}
+
+.register-btn:hover{
+  background:linear-gradient(135deg, #ffa726, #ef6c00);
+  transform:translateY(-2px);
+  box-shadow:0 6px 12px rgba(0,0,0,0.3);
+}
+
+
+
+
+
+
+
+
+
 </style>
 </head>
 
@@ -203,7 +251,7 @@ select option:nth-child(odd){background-color:#fff;}
 <div id="loginContainer">
   <img src="https://i.ibb.co/WNZTWPwv/LOGO-PNG-2025-fab.png" alt="G10 Educational Platform Logo" />
   
-  <h2>Login to Class-12 Biology Practice Test</h2>
+  <h2>Login to 12 biology Practice Test</h2>
   
   <div id="instructionBox">
     <strong>Instructions:</strong>
@@ -215,6 +263,31 @@ select option:nth-child(odd){background-color:#fff;}
     </ul>
   </div>
   <input type="email" id="emailInput" placeholder="Enter your email" required />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <p id="loginError" style="color:red; font-size:13px; margin-top:5px;"></p>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <button onclick="login()">Login</button>
   <div id="aboutBox">
     <strong>About G10 Educational Platform:</strong><br>
@@ -226,11 +299,11 @@ select option:nth-child(odd){background-color:#fff;}
 <div id="appContainer">
   <div class="header-bar" id="headerBar">
   
-    <h1>Class 12 Biology Practice Test</h1>
+    <h1>12 Biology Practice Test</h1>
 	
     <div style="display:flex; gap:4px;">
       <button id="backBtn" class="back-btn" onclick="resetAll()">Back</button>
-      <button class="home-btn" onclick="window.location.href='https://gten-educational-platform.github.io/Class-12/class 12 button.html'">🏠 Home</button>
+      <button class="home-btn" onclick="window.location.href='https://gten-educational-platform.github.io/Class-12/IIT JEE button.html'">🏠 Home</button>
     </div>
   </div>
 
@@ -249,38 +322,130 @@ select option:nth-child(odd){background-color:#fff;}
 <script>
 const BACKEND_URL="https://practice-test-backend-class-12-biology-7asl.onrender.com";
 
+
+
+
+
+
+
+
+
+
 /* === LOGIN LOGIC === */
 async function login(){
  const email=document.getElementById("emailInput").value.trim().toLowerCase();
- if(!email||!email.includes("@")){
-  alert("Your E.Mail ID is not Registered. For registration call +91 9706380857.");return;
+ const errorBox = document.getElementById("loginError");
+
+ // ❗ Step 1: Format validation
+ if(!email || !email.includes("@")){
+  errorBox.innerHTML = `
+    Your E-Mail ID is not registered.<br><br>
+    <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
+      Register Now
+    </a>
+  `;
+  return;
+ } else {
+  errorBox.innerHTML = "";
  }
- const res=await fetch(`${BACKEND_URL}/login`,{
-  method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})
- });
- const data=await res.json();
- if(data.token){
-  localStorage.setItem("studentEmail",email);
-  localStorage.setItem("sessionToken",data.token);
-  document.getElementById("loginContainer").style.display="none";
-  document.getElementById("appContainer").style.display="block";
- } else alert("Login failed. Try again.");
+
+ try {
+   const res=await fetch(`${BACKEND_URL}/login`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email})
+   });
+
+   const data = await res.json();
+
+// 🔥 ADD THIS BLOCK HERE
+if (data.expired) {
+  errorBox.innerHTML = `
+    Your access has expired (365 days completed).<br><br>
+    <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
+      Renew Access
+    </a>
+  `;
+  return;
 }
 
+
+   // ❗ Step 2: Backend validation
+   if(data.token){
+    localStorage.setItem("studentEmail",email);
+    localStorage.setItem("sessionToken",data.token);
+    document.getElementById("loginContainer").style.display="none";
+    document.getElementById("appContainer").style.display="block";
+   } else {
+    errorBox.innerHTML = `
+      Your E-Mail ID is not registered.<br><br>
+      <a href="https://gten-educational-platform.github.io/Class-12/email.html"
+   target="_blank"
+   class="register-btn"
+   onclick="this.style.display='none'">
+  Register Now
+</a>
+    `;
+   }
+
+ } catch (err) {
+   errorBox.innerText = "Server error. Try later.";
+ }
+}
+
+document.getElementById("emailInput").addEventListener("input", function() {
+  const errorBox = document.getElementById("loginError");
+  errorBox.innerHTML = ""; // 🔥 clears error + hides Register button
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* === SESSION VALIDATION === */
-window.onload=async function(){
- const savedEmail=localStorage.getItem("studentEmail");
- const token=localStorage.getItem("sessionToken");
- if(!savedEmail||!token)return;
- const res=await fetch(`${BACKEND_URL}/validate`,{
-  method:"POST",headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({email:savedEmail,token})
- });
- const data=await res.json();
- if(data.valid){
-  document.getElementById("loginContainer").style.display="none";
-  document.getElementById("appContainer").style.display="block";
- } else localStorage.clear();
+window.onload = async function() {
+  const email = localStorage.getItem("studentEmail");
+  const token = localStorage.getItem("sessionToken");
+
+  if (!email || !token) return;
+
+  const res = await fetch(`${BACKEND_URL}/validate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, token })
+  });
+
+  const data = await res.json();
+
+  // 🔥 Handle expiry first
+  if (data.expired) {
+    alert("Your access has expired. Please renew.");
+    localStorage.clear();
+    return;
+  }
+
+  // ✅ ONLY allow if valid
+  if (data.valid) {
+    document.getElementById("loginContainer").style.display = "none";
+    document.getElementById("appContainer").style.display = "block";
+    document.getElementById("viewer").src = SINGLE_LINK;
+  } else {
+    localStorage.clear();
+  }
 };
 
 /* === AUTO LOGOUT === */
@@ -298,8 +463,682 @@ setInterval(async()=>{
  }
 },5000);
 
-/* === MAIN LOGIC === */
-const catalog = {};
+
+
+
+
+
+
+
+
+  const catalog = {
+  "Topic wise mcq (basic)": {
+               "Chapter 1 - CHEMICAL ARITHMETIC": {
+              "1. SCIENTIFIC NOTATION": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/1. SCIENTIFIC NOTATION.html",
+              "2. SIGNIFICANT FIGURES": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/2. SIGNIFICANT FIGURES.html",
+			  "3. Common rules for counting significant figures": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/3. Common rules for counting significant figures.html",
+			  "4. Rounding off": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/4. Rounding off.html",
+			  "5.Significant Figures in Calculations": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/5.Significant Figures in Calculations.html",
+			  "6. UNITS FOR MEASUREMENT": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/6. UNITS FOR MEASUREMENT.html",
+			  "7. Dimensional analysis": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/7. Dimensional analysis.html",
+			  "8. Standard prefixes use to reduce the basic units": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/8. Standard prefixes use to reduce the basic units.html",
+			  "9.Law of conservation of mass": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/9.Law of conservation of mass.html",
+			  "10.Law of constant or definite proportion": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/10.Law of constant or definite proportion.html",
+			  "11. Law of multiple proportion": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/11. Law of multiple proportion.html",
+			  "12. Law of equivalent proportion or law of reciprocal proportion": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/12. Law of equivalent proportion or law of reciprocal proportion.html",
+			  "13. Atomic, Modern atomic, Berzelius, Avogadro Hypothesis": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/13. (Atomic, Modern atomic, Berzelius, Avogadro Hypothesis).html",
+			  "14. Atomic Mass, Relative Atomic Mass, Atomic Mass Unit,Average Atomic Mass,Gram Atomic Mass": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/14. Atomic Mass, Relative Atomic Mass, Atomic Mass Unit,Average Atomic Mass,Gram Atomic Mass.html",
+			  "15.Methods of determination of atomic mass , Dulong and Pettit's method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/15.Methods of determination of atomic mass , Dulong and Pettit's method.html",
+			  "16. Methods of determination of atomic mass, Vapour density method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/16. Methods of determination of atomic mass, Vapour density method.html",
+			  "17. Methods of Determination of Atomic Mass – Specific Heat Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/17. Methods of Determination of Atomic Mass – Specific Heat Method.html",
+			  "18.Methods of Determination of Atomic Mass – Isomorphism Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/18.Methods of Determination of Atomic Mass – Isomorphism Method.html",
+			  "19. Methods of Determination of Molecular Mass – Diffusion Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/19. Methods of Determination of Molecular Mass – Diffusion Method.html",
+			  "20. Methods of Determination of Molecular Mass – Vapour Density Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/20. Methods of Determination of Molecular Mass – Vapour Density Method.html",
+			  "21. Methods of Determination of Molecular Mass – Victor Meyer Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/21. Methods of Determination of Molecular Mass – Victor Meyer Method.html",
+			  "22. Methods of Determination of Molecular Mass – Colligative Property Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/22. Methods of Determination of Molecular Mass – Colligative Property Method.html",
+			  "23. Equivalent Mass – Expressions for Equivalent Mass (EM)": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/23. Equivalent Mass – Expressions for Equivalent Mass (EM).html",
+			  "24. Methods of Determination of Equivalent Mass – Oxide Formation Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/24. Methods of Determination of Equivalent Mass – Oxide Formation Method.html",
+			  "25. Methods of Determination of Equivalent Mass – Chloride Formation Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/25. Methods of Determination of Equivalent Mass – Chloride Formation Method.html",
+			  "26. Methods of Determination of Equivalent Mass – Neutralisation Method (for acids and bases)": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/26. Methods of Determination of Equivalent Mass – Neutralisation Method (for acids and bases).html",
+			  "27. Methods of Determination of Equivalent Mass – Metal Displacement Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/27. Methods of Determination of Equivalent Mass – Metal Displacement Method.html",
+			  "28. Methods of Determination of Equivalent Mass – Electrolytic Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/28. Methods of Determination of Equivalent Mass – Electrolytic Method.html",
+			  "29. Methods of Determination of Equivalent Mass – Double Decomposition Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/29. Methods of Determination of Equivalent Mass – Double Decomposition Method.html",
+			  "30. Methods of Determination of Equivalent Mass – Conversion Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/30. Methods of Determination of Equivalent Mass – Conversion Method.html",
+			  "31. Methods of Determination of Equivalent Mass – Volatile Chloride Method": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/31. Methods of Determination of Equivalent Mass – Volatile Chloride Method.html",
+			  "32.Methods of Determination of Equivalent Mass – Silver Salt Method (for Organic Acids)": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/32.Methods of Determination of Equivalent Mass – Silver Salt Method (for Organic Acids).html",
+			  "33. Introduction to Mole Concept and Methods of calculating moles": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/33. Introduction to Mole Concept and Methods of calculating moles.html",
+			  "34. Mole concept simple numerical ": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/34. Mole concept simple numerical .html",
+			  "35. Percentage Composition & Molecular Formula of a Compound": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/35. Percentage Composition & Molecular Formula of a Compound.html",
+			  "36.Determination of Empirical Formula": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/36.Determination of Empirical Formula.html",
+			  "37. CHEMICAL STOICHIOMETRY-Gravimetric Analysis – Mass-Mass Relationship": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/37. CHEMICAL STOICHIOMETRY-Gravimetric Analysis – Mass-Mass Relationship.html",
+			  "38.Gravimetric Analysis – Mass-Volume Relationship": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/38.Gravimetric Analysis – Mass-Volume Relationship.html",
+			  "39. Gravimetric Analysis – Volume-Volume Relationship": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/39. Gravimetric Analysis – Volume-Volume Relationship.html",
+			  "40. Redox Titrations from Acid-base, Iodiometric, Iodometric, and Precipitation titrations": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/40. Redox Titrations from Acid-base, Iodiometric, Iodometric, and Precipitation titrations.html",
+			  "41 Molarity (M)": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/41 Molarity (M).html",
+			  "42.Numerical questions for volumetric analysis using the Molarity": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/42.numerical questions for volumetric analysis using the Molarity.html",
+			  "43. Molality (m)": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/43. Molality (m).html",
+			  "44. numerical questions on Molality (m)": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/44. numerical questions on Molality (m).html",
+			  "45. Numerical questions on Mole Fraction": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/45. Numerical questions on Mole Fraction.html",
+			  "46. Normality": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/46. Normality.html",
+			  "47. Numerical questions on volumetric analysis (Normality × Eq. wt. = Molarity × Mol. wt.)": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/47. Numerical questions on volumetric analysis (Normality × Eq. wt. = Molarity × Mol. wt.).html",
+			  "48. Numerical questions on, Number of moles, Number of millimoles, Number of equivalents, Number of milliequivalents": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/48. Numerical questions on, Number of moles, Number of millimoles, Number of equivalents, Number of milliequivalents.html",
+			  "49. Numerical POAC questions": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/49. Numerical POAC questions.html",
+			  "50. LIMITING REAGENT": "https://chemistry-g10ep.github.io/IIT-JEE-EASY-QUESTION-HTML/50. LIMITING REAGENT.html"
+            },
+            "Chapter 2 - STRUCTURE OF ATOM": {
+              "1. Electron-Properties of Cathode Rays-Proton-Properties of Anode Rays-Neutron": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/1. Electron-Properties of Cathode Rays-Proton-Properties of Anode Rays-Neutron.html",
+			 "2. Atomic number, Mass number and Atomic species": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/2. Atomic number, Mass number and Atomic species.html",
+			 "3. Electromagnetic radiations covering-Characteristics, Wavelength, Frequency, Velocity, Wave number, Amplitude": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/3. Electromagnetic radiations covering-Characteristics, Wavelength, Frequency, Velocity, Wave number, Amplitude.html",
+			 "4. Rutherford’s Nuclear Model": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/4. Rutherford’s Nuclear Model.html",
+			 "5. Planck’s Quantum Theory, covering Blackbody Radiation, Photoelectric Effect, and Einstein’s Photoelectric Equation.": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/5. Planck’s Quantum Theory, covering Blackbody Radiation, Photoelectric Effect, and Einstein’s Photoelectric Equation..html",
+			 "6. Bohr’s atomic model (focusing  radius of Bohr’s orbit and advantages of the model)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/6. Bohr’s atomic model (focusing  radius of Bohr’s orbit and advantages of the model).html",
+			 "7. Bohr’s model focused on electron velocity": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/7. Bohr’s model focused on electron velocity.html",
+			 "8. Bohr’s model, all focused on energy of an electron": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/8. Bohr’s model, all focused on energy of an electron.html",
+			 "9. Spectral evidence for quantisation (Hydrogen spectrum explained using Bohr’s model) and Failure of Bohr’s model": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/9. Spectral evidence for quantisation (Hydrogen spectrum explained using Bohr’s model) and Failure of Bohr’s model.html",
+			 "10. Dual nature of electron – de Broglie equation": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/10. Dual nature of electron – de Broglie equation.html",
+			 "11. Heisenberg’s Uncertainty Principle": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/11. Heisenberg’s Uncertainty Principle.html",
+			 "12. Schrödinger wave equation": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/12. Schrödinger wave equation.html",
+			 "13. Radial probability distribution curves": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/13. Radial probability distribution curves.html",
+			 "14. quantum numbers": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/14. quantum numbers.html",
+			 "15. shapes of orbitals (s,p,d,f)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/15. shapes of orbitals (s,p,d,f).html",
+			 "16. Rules for filling of electrons in various orbitals-Aufbau’s principle,(n+l) Rule, Pauli’s exclusion principle, Hund’s Rule of maximum multiplicity": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/16. Rules for filling of electrons in various orbitals-Aufbau’s principle,(n+l) Rule, Pauli’s exclusion principle, Hund’s Rule of maximum multiplicity.html",
+			 "17. Electronic configurations, focusing on symmetrical distribution and exchange energy": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-ATOMIC-STRUCTURE/17. Electronic configurations, focusing on symmetrical distribution and exchange energy.html"
+
+			   },
+			"Chapter 3 - PERIODIC CLASIFICATION": {
+              "1. Dobereiner’s law of triads (1829)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/1. Dobereiner’s law of triads (1829).html",
+			  "2.Telluric screw or Helix (1862) and Newlands law of octaves (1864)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/2.Telluric screw or Helix (1862) and Newlands law of octaves (1864).html",
+			  "3. Mendeleef’s period law (1869)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/3. Mendeleef’s period law (1869).html",
+			  "4. Modern Periodic Law": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/4. Modern Periodic Law.html",
+			  "5. Classification of element on the basis of electronic configuration": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/5. Classification of element on the basis of electronic configuration.html",
+			  "6. Periodicity in properties": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/6. Periodicity in properties.html",
+			  "7. Covalent, Ionic and Vander waal's radii": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/7. Covalent, Ionic and Vander waal's radii.html",
+			  "8. Ionisation potential or ionisation energy": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/8. Ionisation potential or ionisation energy.html",
+			  "9. Variation of ionisation energy in periodic table": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/9. Variation of ionisation energy in periodic table.html",
+			  "10 Factors Affecting the Value of Ionisation Energy": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/10 Factors Affecting the Value of Ionisation Energy.html",
+			  "11. relative and impoortens of ionasation energy": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/11. relative and impoortens of ionasation energy.html",
+			  "12. Electron affinity": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/12. Electron affinity.html",
+			  "13.Variation of Electronegativity in the Periodic Table": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/13.Variation of Electronegativity in the Periodic Table.html",
+			  "14.Electronegativity may be expressed on the following three scales": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/14.Electronegativity may be expressed on the following three scales.html",
+			  "15.Factors affecting the value of electronegativity": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/15.Factors affecting the value of electronegativity.html",
+			  "16.Importance of electronegativity": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/16.Importance of electronegativity.html",
+			  "17. Atomic volume, Density, Melting and boiling points, Oxidation state (Oxidation number, O.N.), Magnetic properties, Hydration and hydration, Acid-base-character of oxides, Hydride": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/17. Atomic volume, Density, Melting and boiling points, Oxidation state (Oxidation number, O.N.), Magnetic properties, Hydration and hydration, Acid-base-character of oxides, Hydride.html",
+			  "18. Diagonal Relationship": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-PERIODICITY/18. Diagonal Relationship.html"
+				},
+	"Chapter 4 - CHEMICAL BONDING": {
+              "1. Cause and Modes of Chemical Combination": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/1. Cause and Modes of Chemical Combination.html",
+			 "2. Electrovalent Bond, covering conditions for formation and characteristics of electrovalent compounds": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/2. Electrovalent Bond, covering conditions for formation and characteristics of electrovalent compounds.html",
+			 "3. Covalent bond- Conditions for formation of covalent bond Characteristics of covalent compounds": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/3. Covalent bond- Conditions for formation of covalent bond Characteristics of covalent compounds.html",
+			 "4. Coordinate Covalent (Dative) Bonds": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/4. Coordinate Covalent (Dative) Bonds.html",
+			 "5. Dipole Moment and Fajan's Rule": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/5. Dipole Moment and Fajan's Rule.html",
+			 "6. Valence Bond Theory (VBT)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/6. Valence Bond Theory (VBT).html",
+			 "7. Hybridization, covering characteristics and how to determine hybridization types": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/7. Hybridization, covering characteristics and how to determine hybridization types.html",
+			 "8. Resonance and Resonance Energy": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/8. Resonance and Resonance Energy.html",
+			 "9. Bond characteristics-Bond length, Bond energy, Bond angle": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/9. Bond characteristics-Bond length, Bond energy, Bond angle.html",
+			  "10.Expected Geometry vs Actual Geometry, based on the geometry transformations": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/10.Expected Geometry vs Actual Geometry, based on the geometry transformations.html",
+			  "11. Molecular Orbital Theory (MOT)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/10. Molecular Orbital Theory (MOT).html",
+			  "12. Hydrogen Bonding, covering intermolecular and intramolecular bonds": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-BONDING/11. Hydrogen Bonding, covering intermolecular and intramolecular bonds.html"
+			  
+				},
+	"Chapter 5 - CHEMICAL KINETICS": {
+              "1. Chemical Kinetics questions (types of reactions- examples of very fast,moderate,very slow reactions)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/1. Chemical Kinetics questions (types of reactions- examples of very fast,moderate,very slow reactions).html",
+			 "2. Rate of Reaction, focusing on concentration expressed in active mass": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/2. Rate of Reaction, focusing on concentration expressed in active mass.html",
+			 "3. factors affecting the rate of a reaction": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/3. factors affecting the rate of a reaction.html",
+			 "4. Law of Mass Action and Rate Constant": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/4. Law of Mass Action and Rate Constant.html",
+			 "5. Molecularity and Order of a reaction, Pseudo unimolecular reactions, Order vs Molecularity examples, Rate constant and parameters of different orders": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/5. Molecularity and Order of a reaction, Pseudo unimolecular reactions, Order vs Molecularity examples, Rate constant and parameters of different orders.html",
+			 "6. Methods for determination of order of a reaction -Integration method, Plots of half-lives vs concentrations, Graphical method, Vant Hoff differential method, Ostwald’s isolation method": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/6. Methods for determination of order of a reaction -Integration method, Plots of half-lives vs concentrations, Graphical method, Vant Hoff differential method, Ostwald’s isolation method.html",
+			 "7. Theories of Reaction Rate (Collision Theory & Transition State Theory)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/7. Theories of Reaction Rate (Collision Theory & Transition State Theory).html",
+			 "8. Arrhenius Equation": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/8. Arrhenius Equation.html",
+			 "9. Mechanism of Chemical Reactions": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/9. Mechanism of Chemical Reactions.html",
+			 "10. Chemistry questions on Photochemical Reactions": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/10. Chemistry questions on Photochemical Reactions.html"	
+            },
+ "Chapter 6 - Thermodynamic and Thermochemistry": {
+              "1. Thermodynamics & Thermochemistry (Basic Concepts)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/1. Thermodynamics & Thermochemistry (Basic Concepts).html",
+			 "2. Macroscopic Properties, Intensive & Extensive Properties, State of a System, and State Variables": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/2. Macroscopic Properties, Intensive & Extensive Properties, State of a System, and State Variables.html",
+			 "3. Thermodynamic Equilibrium (Chemical, Mechanical, Thermal)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/3. Thermodynamic Equilibrium (Chemical, Mechanical, Thermal).html",
+			 "4. Thermodynamic process": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/4. Thermodynamic process.html",
+			 "5. Internal energy (E) - Characteristics of internal energy Change in internal energy (deltaE)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/5. Internal energy (E) - Characteristics of internal energy Change in internal energy (deltaE).html",
+			 "6. Heat (q) and Work (w) covering units, sign conventions": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/6. Heat (q) and Work (w) covering units, sign conventions.html",
+			 "7. Zeroth Law of Thermodynamics, First Law of Thermodynamics": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/7. Zeroth Law of Thermodynamics, First Law of Thermodynamics.html",
+			 "8. Enthalpy and Enthalpy Change": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/8. Enthalpy and Enthalpy Change.html",
+			 "9. Specific heat and Molar heat capacity": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/9. Specific heat and Molar heat capacity.html",
+			 "10. Expansion of an Ideal Gas covering Isothermal expansion, Work done in reversible and irreversible processes": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/10. Expansion of an Ideal Gas covering Isothermal expansion, Work done in reversible and irreversible processes.html",
+			 "11. Adiabatic Expansion (Reversible & Irreversible)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/11. Adiabatic Expansion (Reversible & Irreversible).html",
+			 "12. Spontaneous and Non-Spontaneous Processes": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/12. Spontaneous and Non-Spontaneous Processes.html",
+			 "13. Second Law of Thermodynamics": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/14. Second Law of Thermodynamics.html",
+			 "14. The Carnot Cycle": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/14. The Carnot Cycle.html",
+			 "15. Entropy and Entropy Change": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/15. Entropy and Entropy Change.html",
+			 "16. Entropy Changes in System & Surroundings, and Total Entropy Change": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/16. Entropy Changes in System & Surroundings, and Total Entropy Change.html",
+			 "17. Gibbs Free Energy and Free Energy Change": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/17. Gibbs Free Energy and Free Energy Change.html",
+			 "18. Third Law of Thermodynamics": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/18. Third Law of Thermodynamics.html",
+			 "19. Thermochemistry questions on Exothermic and Endothermic Reactions": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/19. Thermochemistry questions on Exothermic and Endothermic Reactions.html",
+			 "20. Heat of Reaction - Enthalpy of Reaction": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/20. Heat of Reaction - Enthalpy of Reaction.html",
+			 "21. Types of Heat of Reaction": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/21. Types of Heat of Reaction.html",
+			 "22. Experimental determination of heat of reaction using Bomb Calorimeter": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/22. Experimental determination of heat of reaction using Bomb Calorimeter.html",
+			 "23. Laws of Thermochemistry, including Levi-Osier & Laplace Law, Hess’s Law": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/23. Laws of Thermochemistry, including Levi-Osier & Laplace Law, Hess’s Law.html",
+			  "": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/.html",
+			 "24. Bond Energy, Bond Enthalpies, Applications, and Resonance Energy": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Thermodynamic/24. Bond Energy, Bond Enthalpies, Applications, and Resonance Energy.html"		  
+		  },
+	   "Chapter 6 - CHEMICAL EQUILIBRIUM": {
+              "1. Reversible & Irreversible Reactions": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-EQULI/1. Reversible & Irreversible Reactions.html",
+			 "2. Equilibrium and its Dynamic Nature": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-EQULI/2. Equilibrium and its Dynamic Nature.html",
+			 "3. Law of Mass Action & Equilibrium Constant": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-EQULI/3. Law of Mass Action & Equilibrium Constant.html",
+			 "4. Types of Equilibria": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-EQULI/4. Types of Equilibria.html",
+			 "5. Le-Chatelier’s Principle and its Applications": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-EQULI/5. Le-Chatelier’s Principle and its Applications.html",
+			 "6. Relation between Vapour Density & Degree of Dissociation": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-CHEMICAL-EQULI/6. Relation between Vapour Density & Degree of Dissociation.html"		  
+		  },
+	   "Chapter 5 - IONIC EQULIBRIUM": {
+              "1. Electrical conductors": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/1. Electrical conductors.html",
+			 "2. Arrhenius Theory of Electrolytic Dissociation": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/2. Arrhenius Theory of Electrolytic Dissociation.html",
+			 "3. Ostwald’s Dilution Law": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/3. Ostwald’s Dilution Law.html",
+			 "4. Dissociation Constants of Acids & Bases": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/4. Dissociation Constants of Acids & Bases.html",
+			 "5. Common Ion Effect and Isohydric solution": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/5. Common Ion Effect and Isohydric solution.html",
+			 "6. Solubility Product (Ksp)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/6. Solubility Product (Ksp).html",
+			 "7. Acid & Bases covering Arrhenius, Brønsted–Lowry, Lewis concepts": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/7. Acid & Bases covering Arrhenius, Brønsted–Lowry, Lewis concepts.html",
+			 "8. Relative Strength of Acids and Bases": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/8. Relative Strength of Acids and Bases.html",
+			 "9. Acid–Base Neutralisation & Salts": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/9. Acid–Base Neutralisation & Salts.html",
+			 "10. Ionic Product of Water": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/10. Ionic Product of Water.html",
+			 "11. Hydrogen ion concentration – pH scale": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/11. Hydrogen ion concentration – pH scale.html",
+			 "12. Buffer Solutions": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/12. Buffer Solutions.html",
+			 "13. Salt Hydrolysis": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/13. Salt Hydrolysis.html",
+			 "14. Indicators": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-IONIC-EQULI/14. Indicators.html"		  
+		  },
+		  
+		  
+		    "Chapter 6.1 - HYDROCARBON": {
+              "1. Hydrocarbon Inntroduction": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Hydrocarbon/1. Hydrocarbon Inntroduction.html",
+			 "2. Alkane Introduction": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Hydrocarbon/2. Alkane Introduction.html",
+			 "3. PREPARATION OF ALKANES BY CATALYTIC HYDROGENATION OF ALKENES AND ALKYNES": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Hydrocarbon/3. PREPARATION OF ALKANES BY CATALYTIC HYDROGENATION OF ALKENES AND ALKYNES.html",
+			 "4. Preparation of alkane By Reduction of alkyl halide": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Hydrocarbon/4. Preparation of alkane By Reduction of alkyl halide.html",
+			 "5. Prepration of alkane from Coupling Reactions of alkyl halide": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Hydrocarbon/5. Prepration of alkane from Coupling Reactions of alkyl halide.html",
+			 "COMING SOON": "https://chemistry-g10ep.giub.io/IIT-JEE-E-Q--HTML-CHEMICAL-EQULI/6. Relation between Vapour Density & Degree of Dissociation.html"		  
+		  },
+		  
+	  		  "Chapter 6 - Solution": {
+              "1. Solubility and Kinds of Solutions": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/1. Solubility and Kinds of Solutions.html",
+			 "2. Methods of Expressing Concentration of Solution(Percentage, wbyw %, wbyv %, vbyv %, vbyw %": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/2. Methods of Expressing Concentration of Solution(Percentage, wbyw %, wbyv %, vbyv %, vbyw %.html",
+			 "3. ppm, ppb, and strength": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/3. ppm, ppb, and strength.html",
+			 "4. Normality (N)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/4. Normality (N).html",
+			 "5. Molarity (M)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/5. Molarity (M).html",
+			 "6. Relation between Molarity and Normality": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/6. Relation between Molarity and Normality.html",
+			 "7. Molality (m)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/7. Molality (m).html",
+			 "8. Relation between Molarity (M) and Molality (m)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/8. Relation between Molarity (M) and Molality (m).html",
+			 "9. Formality (F)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/9. Formality (F).html",
+			 "10. Mole Fraction (X)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/10. Mole Fraction (X).html",
+			"11. Relation between molality (m) and mole fraction of the solute (Xₐ), Mass Fraction and Demal Unit (D)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/11. Relation between molality (m) and mole fraction of the solute (Xₐ), Mass Fraction and Demal Unit (D).html",
+			 "12. Colligative Property- Lowering of Vapour Pressure": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/12. Colligative Property- Lowering of Vapour Pressure.html",
+			 "13. Ideal and Non-Ideal Solutions, including positive and negative deviations from Raoult’s law": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/13. Ideal and Non-Ideal Solutions, including positive and negative deviations from Raoult’s law.html",
+			 "14. Azeotropic mixtures": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/14. Azeotropic mixtures.html",
+			 "15. Osmosis and Osmotic Pressure": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/15. Osmosis and Osmotic Pressure.html",
+			 "16. Elevation in Boiling Point (Ebullioscopy)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/16. Elevation in Boiling Point (Ebullioscopy).html",
+			 "17. Depression in Freezing Point (Cryoscopy)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/17. Depression in Freezing Point (Cryoscopy).html",
+			 "18. Colligative properties of electrolytes": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/18. Colligative properties of electrolytes.html",
+			 "19. Abnormal Molecular Masses": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/19. Abnormal Molecular Masses.html",
+			 "20. Van’t Hoff’s Factor ( i )": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/20. Van’t Hoff’s Factor ( i ).html"	
+            
+			},
+	   "Chapter 5 - Electrochemistry": {
+              "1. Electrolytes & Electrolysis": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/1. Electrolytes & Electrolysis.html",
+			 "2. Faraday’s laws of electrolysis": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/2. Faraday’s laws of electrolysis.html",
+			 "3. Metallic and Electrolytic Conductors": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/3. Metallic and Electrolytic Conductors.html",
+			 "4. Electrolytic Conduction (Ohm’s law, Resistance, Resistivity, Conductance, Conductivity)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/4. Electrolytic Conduction (Ohm’s law, Resistance, Resistivity, Conductance, Conductivity).html",
+			 "5. molar conductance-equivalent conductance-experimental measurement-conductivity calculations": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/5. molar conductance-equivalent conductance-experimental measurement-conductivity calculations.html",
+			 "6. Factors affecting electrolytic conductance": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/6. Factors affecting electrolytic conductance.html",
+			 "7. Migration of ions and Transport numbers": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/7. Migration of ions and Transport numbers.html",
+			 "8. Kohlrausch’s law and its applications": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/8. Kohlrausch’s law and its applications.html",
+			 "9. Electrochemical- Galvanic cells": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/9. Electrochemical- Galvanic cells.html",
+			 "10. Commercial Cells-Batteries": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/10. Commercial Cells-Batteries.html",
+			 "11.Electrode Potentials": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/11.Electrode Potentials.html",
+			 "12. Cell Potential-EMF of the Cell and Nernst Equation": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/12. Cell Potential-EMF of the Cell and Nernst Equation.html",
+			 "13. Relationship between Potential, Gibbs Free Energy, and Equilibrium Constant": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/13. Relationship between Potential, Gibbs Free Energy, and Equilibrium Constant.html",
+			 "14. Electrochemical Series": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/14. Electrochemical Series.html",
+			 "15. Corrosion": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML--Electrochemistry/15. Corrosion.html"	
+            },
+	  "Chapter 4 - CHEMICAL KINETICS": {
+              "1. Chemical Kinetics questions (types of reactions- examples of very fast,moderate,very slow reactions)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/1. Chemical Kinetics questions (types of reactions- examples of very fast,moderate,very slow reactions).html",
+			 "2. Rate of Reaction, focusing on concentration expressed in active mass": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/2. Rate of Reaction, focusing on concentration expressed in active mass.html",
+			 "3. factors affecting the rate of a reaction": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/3. factors affecting the rate of a reaction.html",
+			 "4. Law of Mass Action and Rate Constant": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/4. Law of Mass Action and Rate Constant.html",
+			 "5. Molecularity and Order of a reaction, Pseudo unimolecular reactions, Order vs Molecularity examples, Rate constant and parameters of different orders": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/5. Molecularity and Order of a reaction, Pseudo unimolecular reactions, Order vs Molecularity examples, Rate constant and parameters of different orders.html",
+			 "6. Methods for determination of order of a reaction -Integration method, Plots of half-lives vs concentrations, Graphical method, Vant Hoff differential method, Ostwald’s isolation method": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/6. Methods for determination of order of a reaction -Integration method, Plots of half-lives vs concentrations, Graphical method, Vant Hoff differential method, Ostwald’s isolation method.html",
+			 "7. Theories of Reaction Rate (Collision Theory & Transition State Theory)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/7. Theories of Reaction Rate (Collision Theory & Transition State Theory).html",
+			 "8. Arrhenius Equation": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/8. Arrhenius Equation.html",
+			 "9. Mechanism of Chemical Reactions": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/9. Mechanism of Chemical Reactions.html",
+			 "10. Chemistry questions on Photochemical Reactions": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Chemical-Kinetics/10. Chemistry questions on Photochemical Reactions.html"	
+            },
+	   "Chapter 4 - The d-and f Block Eleents": {
+              "1. The d- and f-Block Elements - Introduction": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/1. The d- and f-Block Elements - Introduction.html",
+			  "2. Position in the Periodic Table and Electronic Configuration": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/2. Position in the Periodic Table and Electronic Configuration.html",
+			   "3. variation in atomic and ionic size, lanthanoid contraction, and actinoid contraction": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/3. variation in atomic and ionic size, lanthanoid contraction, and actinoid contraction.html",
+			    "4. Ionisation Enthalpy and Oxidation States of d-Block Elements": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/4. Ionisation Enthalpy and Oxidation States of d-Block Elements.html",
+				 "5. Trends in 𝑀3+-𝑀2,and 𝑀2+-𝑀M2-+M Standard Electrode Potentials": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/5. Trends in 𝑀3+𝑀2+M3+M2+ and 𝑀2+𝑀M2+M Standard Electrode Potentials.html",
+				  "6. Trends in stability of higher oxidation states, chemical reactivity, and standard electrode (E°) values": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/6. Trends in stability of higher oxidation states, chemical reactivity, and standard electrode (E°) values.html",
+				   "7. Magnetic properties and formation of coloured ions": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/7. Magnetic properties and formation of coloured ions.html",
+				    "8. Formation of Complex Compounds": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/8. Formation of Complex Compounds.html",
+					 "9. Catalytic Properties, Formation of interstitial compounds and alloy formation": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/9. Catalytic Properties, Formation of interstitial compounds and alloy formation.html",
+					  "10. Oxides and Oxoanions of metals": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/10. Oxides and Oxoanions of metals.html",
+					   "11. potassium dichromate (𝐾2𝐶𝑟2𝑂7)": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/11. potassium dichromate (𝐾2𝐶𝑟2𝑂7).html",
+					    "12. Potassium chromate": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/12. Potassium chromate.html",
+						"13. Reactions and Uses of Dichromates, Chromates, and Permanganates": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/13. Reactions and Uses of Dichromates, Chromates, and Permanganates.html",
+						"14. Lanthanoids-electronic configuration, atomic-ionic size, and oxidation state": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/14. Lanthanoids-electronic configuration, atomic-ionic size, and oxidation state.html",
+						 "15. Chemical Properties of Lanthanoids": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/15. Chemical Properties of Lanthanoids.html",
+						 "16. Actinoids -electronic configuration, oxidation states, and chemical properties": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/16. Actinoids -electronic configuration, oxidation states, and chemical properties.html",
+						  "17. Applications of d- and f-block elements": "https://chemistry-g10ep.github.io/Board-E--d-f-block-Elements/17. Applications of d- and f-block elements.html"
+						  	},
+		  		   "Chapter 5 - COORDINATION COMPOUNDS": {
+              "1. introductory part of Coordination Chemistry": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/1. introductory part of Coordination Chemistry.html",
+			 "2. Terminology of Coordination Compounds-Central metal atom and ion, Complex ion, Ligands": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/2. Terminology of Coordination Compounds-Central metal atom and ion, Complex ion, Ligands.html",
+			 "3. Coordination Sphere, Coordination Number, and Ionisation Sphere": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/3. Coordination Sphere, Coordination Number, and Ionisation Sphere.html",
+			 "4. Oxidation Number and Charge on Complexes": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/4. Oxidation Number and Charge on Complexes.html",
+			 "5. IUPAC Nomenclature of Coordination Compounds": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/5. IUPAC Nomenclature of Coordination Compounds.html",
+			 "6. Structural isomerism": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/6. Structural isomerism.html",
+			 "7. Stereoisomerism": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/7. Stereoisomerism.html",
+			 "8. Bonding in Coordination Compounds – Werners Theory": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/8. Bonding in Coordination Compounds – Werners Theory.html",
+			 "9. Valence Bond Theory (VBT) of Coordination Compounds": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/9. Valence Bond Theory (VBT) of Coordination Compounds.html",
+			 "10. Ligand Field Theory (LFT)": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/10. Ligand Field Theory (LFT).html",
+			 "11. Factors Affecting Stability of Complexes and metal carbonyl bonding": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/11. Factors Affecting Stability of Complexes and metal carbonyl bonding.html",
+			 "12. Preparation and Applications of Coordination Compounds": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/12. Preparation and Applications of Coordination Compounds.html",
+			 "13. Organometallic Compounds": "https://chemistry-g10ep.github.io/IIT-JEE-E-Q--HTML-Cor-COMPOUND/13. Organometallic Compounds.html"		  
+		  },
+  	  	  	  		   "Chapter 5 - Haloalkane & Aryl Halide-2026": {
+              "1. Classification of compounds containing sp³ C–X bond": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/1. Classification of compounds containing sp³ C–X bond.html",
+			 "2. Classification of compounds containing sp² C–X bond": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/2. Classification of compounds containing sp² C–X bond.html",
+			 "3. Haloalkanes & Haloarenes (Nomenclature)": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/3. Haloalkanes & Haloarenes (Nomenclature).html",
+			 "4. Haloalkanes & Haloarenes - Nature of C–X bond": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/4. Haloalkanes & Haloarenes - Nature of C–X bond.html",
+			 "5. From alkane to alkylhalide (i) By halogenation": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/5. From alkane to alkylhalide (i) By halogenation.html",
+			 "6. From alkene Hydrohalogenation to alkylhalide": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/6. From alkene Hydrohalogenation to alkylhalide.html",
+			 "7. From alcohols (i) By the action of halogen acidsGroove’s process": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/7. From alcohols (i) By the action of halogen acidsGroove’s process.html",
+			 "8. DARZENS’ PROCESS + HUNSDIECKER REACTION": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/8. DARZENS’ PROCESS + HUNSDIECKER REACTION.html",
+			 "9. Using PCl₅ and PCl₃ to alkylhalide (i) By halogenation": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/9. Using PCl₅ and PCl₃ to alkylhalide (i) By halogenation.html",
+			 "10. Finkelstein Reaction + Limitation + Swarts Reaction": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/10. Finkelstein Reaction + Limitation + Swarts Reaction.html",
+			 "11. Physical and Chemical Properties": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/11. Physical and Chemical Properties.html",
+			 "12. Nucleophilic Substitution (SN) Reactions – Hydrolysis of Alkyl Halides": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/12. Nucleophilic Substitution (SN) Reactions – Hydrolysis of Alkyl Halides.html",
+			 "13. Reaction with alkoxides, dry silver oxide,NaSH,KSH, alcoholic KCN,AgCN": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/13. Reaction with alkoxides, dry silver oxide,NaSH,KSH, alcoholic KCN,AgCN.html",
+			 "14. Reaction with Alcoholic KCN vs AgCN and KNO₂ vs AgNO₂": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/14. Reaction with Alcoholic KCN vs AgCN and KNO₂ vs AgNO₂.html",
+			 "15. Reaction with Ammonia and Silver Salts of Fatty Acids": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/15. Reaction with Ammonia and Silver Salts of Fatty Acids.html",
+			 "16. Reaction with Sodium Acetylide and Sodium - Potassium Sulphide": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/16. Reaction with Sodium Acetylide and Sodium - Potassium Sulphide.html",
+			 "17. Elimination Reactions of Alkyl Halides (E1 & E2)": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/17. Elimination Reactions of Alkyl Halides (E1 & E2).html",
+			 "18.Miscellaneous Reactions of Alkyl Halides": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/18.Miscellaneous Reactions of Alkyl Halides.html",
+			 "19.Methods of Preparation of Dihalides": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/19.Methods of Preparation of Dihalides.html",
+			 "20. α–ω Dihalides": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/20. α–ω Dihalides.html",
+			 "21. Chemical Properties of Dihalides": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/21. Chemical Properties of Dihalides.html",
+			"22. Tri-halides (Chloroform)": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/22. Tri-halides (Chloroform).html",
+			 "23. Iodoform (CHI₃)": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/23. iodoform (CHI₃).html",
+			  "24. Carbon tetrachloride, CCl4 Prepration": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/24. Carbon tetrachloride, CCl4 Prepration.html",
+			  "25. Physical properties, chemical properties, reactions, and uses of carbon tetrachloride": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/25. Physical properties, chemical properties, reactions, and uses of carbon tetrachloride.html",
+			  "26. Unsaturated halides (Halo-alkenes) Vinyl chloride (chloroethene)": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/26. Unsaturated halides (Halo-alkenes) Vinyl chloride (chloroethene).html",
+			  "27. Allyl iodide or 3-iodopropene-1": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/27. Allyl iodide or 3-iodopropene-1.html",
+			  "28. Methods of preparation Halo Arenes": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/28. Methods of preparation Halo Arenes.html",
+			  "29. Chemical properties of  Halo-arenes": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/29. Chemical properties of  Halo-arenes.html",
+			  "30. SN Reactions Under Vigorous Conditions": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/30. SN Reactions Under Vigorous Conditions",
+			  "31. Electrophilic aromatic substitution": "https://chemistry-g10ep.github.io/IIT-JEE-E--Halo-Ar-and-R/31. Electrophilic aromatic substitution"
+			 
+		  },
+		   "Chapter 7 - Coming Soon": {
+              "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"		  
+		  },
+    "Chapter 8 - Coming Soon": {
+      "Coming Soon 1": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+      "Coming Soon 2": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"
+    }
+  },
+	
+ "Topic wise mcq (medium) ": {
+            "Chapter 1 - CHEMICAL ARITHMETIC": {
+              "1.Significant figures, Units for measurement, Matter and seperation of mixture(MEDIUM)": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/1.Significant figures, Units for measurement, Matter and seperation of mixture(MEDIUM).html",
+              "2.Law of Chemical Combination": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/2.Law of Chemical Combination.html",
+			  "3. Atomic, Molecular and Equivalent masses-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/3. Atomic, Molecular and Equivalent masses-1.html",
+			  "3. Atomic, Molecular and Equivalent masses-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/3. Atomic, Molecular and Equivalent masses-2.html",
+			  "3. Atomic, Molecular and Equivalent masses-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/3. Atomic, Molecular and Equivalent masses-3.html",
+			  "4. The Mole Concept": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/4. The Mole Concept.html",
+			  "5. Percentage composition & Molecular formula": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/5. Percentage composition & Molecular formula.html",
+			  "6. Chemical stoichiometry -1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/6. Chemical stoichiometry -1.html",
+			  "6. Chemical stoichiometry -2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/6. Chemical stoichiometry -2.html",
+			  "6. Chemical stoichiometry -3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/6. Chemical stoichiometry -3.html"
+            },
+            "Chapter 2 - STRUCTURE OF ATOM": {
+              "1. Discovery and Properties of anode, cathode rays neutron and Nuclear structure-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/1. Discovery and Properties of anode, cathode rays neutron and Nuclear structure-1.html",
+			 "1. Discovery and Properties of anode, cathode rays neutron and Nuclear structure-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/1. Discovery and Properties of anode, cathode rays neutron and Nuclear structure-2.html",
+			 "2. Atomic number, Mass number, Atomic species-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/2. Atomic number, Mass number, Atomic species-1.html",
+			 "2. Atomic number, Mass number, Atomic species-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/2. Atomic number, Mass number, Atomic species-2.html",
+			 "2. Atomic number, Mass number, Atomic species-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/2. Atomic number, Mass number, Atomic species-3.html",
+			 "3. Atomic models and Planck's quantum theory-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/3. Atomic models and Planck's quantum theory-1.html",
+			 "3. Atomic models and Planck's quantum theory-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/3. Atomic models and Planck's quantum theory-2.html",
+			 "3. Atomic models and Planck's quantum theory-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/3. Atomic models and Planck's quantum theory-3.html",
+			 "3. Atomic models and Planck's quantum theory-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/3. Atomic models and Planck's quantum theory-4.html",
+			 "4 Dual nature of electron": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/4 Dual nature of electron.html",
+			 "5. Uncertainty principle and Schrodinger wave equation": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/5. Uncertainty principle and Schrodinger wave equation.html",
+			 "6. Quantum number, Electronic configuration and Shape of orbitals-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/6. Quantum number, Electronic configuration and Shape of orbitals-1.html",
+			 "6. Quantum number, Electronic configuration and Shape of orbitals-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/6. Quantum number, Electronic configuration and Shape of orbitals-2.html",
+			 "6. Quantum number, Electronic configuration and Shape of orbitals-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/6. Quantum number, Electronic configuration and Shape of orbitals-3.html",
+			 "6. Quantum number, Electronic configuration and Shape of orbitals-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/6. Quantum number, Electronic configuration and Shape of orbitals-4.html",
+			 "6. Quantum number, Electronic configuration and Shape of orbitals-5": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/6. Quantum number, Electronic configuration and Shape of orbitals-5.html",
+			 "6. Quantum number, Electronic configuration and Shape of orbitals-6": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/6. Quantum number, Electronic configuration and Shape of orbitals-6.html",
+			 "6. Quantum number, Electronic configuration and Shape of orbitals-7": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/6. Quantum number, Electronic configuration and Shape of orbitals-7.html",
+			 "6. Quantum number, Electronic configuration and Shape of orbitals-8": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-STRUCTURE-OF-ATOM/6. Quantum number, Electronic configuration and Shape of orbitals-8.html"
+
+			   },
+			"Chapter 3 - CHEMICAL PREIODICITY": {
+              "1. Extended or long form of periodic table -1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/1. Extended or long form of periodic table -1.html",
+			  "1. Extended or long form of periodic table -2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/1. Extended or long form of periodic table -2.html",
+			  "1. Extended or long form of periodic table -3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/1. Extended or long form of periodic table -3.html",
+			  "1. Extended or long form of periodic table -4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/1. Extended or long form of periodic table -4.html",
+			  "2. Atomic and Ionic radii-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/2. Atomic and Ionic radii-1.html",
+			  "2. Atomic and Ionic radii-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/2. Atomic and Ionic radii-2.html",
+			  "2. Atomic and Ionic radii-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/2. Atomic and Ionic radii-3.html",
+			  "3. Ionisation energy-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/3. Ionisation energy-1.html",
+			  "3. Ionisation energy-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/3. Ionisation energy-2.html",
+			  "3. Ionisation energy-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/3. Ionisation energy-3.html",
+			  "4. Electron affinity": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/4. Electron affinity.html",
+			  "5. Electronegativity": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/5. Electronegativity.html",
+			  "6. Valency and oxidation state-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/6. Valency and oxidation state-1.html",
+			  "6. Valency and oxidation state-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CCHEMICAL-PREIODICITY/6. Valency and oxidation state-2.html"
+			  
+				},
+	 	"Chapter 4 - CHEMICAL BONDING": {
+              "1. Electrovalent bonding-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/1. Electrovalent bonding-1.html",
+			 "1. Electrovalent bonding-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/1. Electrovalent bonding-2.html",
+			 "1. Electrovalent bonding-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/1. Electrovalent bonding-3.html",
+			 "1. Electrovalent bonding-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/1. Electrovalent bonding-4.html",
+			 "2. Covalent bonding-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/2. Covalent bonding-1.html",
+			 "2. Covalent bonding-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/2. Covalent bonding-2.html",
+			 "2. Covalent bonding-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/2. Covalent bonding-3.html",
+			 "2. Covalent bonding-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/2. Covalent bonding-4.html",
+			 "3. Co-ordinate or Dative bonding": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/3. Co-ordinate or Dative bonding.html",
+			 "4. Dipole moment-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/4. Dipole moment-1.html",
+			 "4. Dipole moment-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/4. Dipole moment-2.html",
+			 "5. Polarisation and Fajan's rule": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/5. Polarisation and Fajan's rule.html",
+			 "6. Overlaping-pi and sigma bonds": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/6. Overlaping-pi and sigma bonds.html",
+			 "7. Hybridisation-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/7. Hybridisation-1.html",
+			 "7. Hybridisation-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/7. Hybridisation-2.html",
+			 "7. Hybridisation-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/7. Hybridisation-3.html",
+			 "7. Hybridisation-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/7. Hybridisation-4.html",
+			 "7. Hybridisation-5": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/7. Hybridisation-5.html",
+			 "7. Hybridisation-6": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/7. Hybridisation-6.html",
+			 "7. Hybridisation-7": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/7. Hybridisation-7.html",
+			 "7. Hybridisation-8": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/7. Hybridisation-8.html",
+			 "8. Resonance": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/8. Resonance.html",
+			 "9. VSEPR Theory-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/9. VSEPR Theory-1.html",
+			 "9. VSEPR Theory-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/9. VSEPR Theory-2.html",
+			 "10. Molecular orbital theory-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/10. Molecular orbital theory-1.html",
+			 "10. Molecular orbital theory-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/10. Molecular orbital theory-2.html",
+			 "10. Molecular orbital theory-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/10. Molecular orbital theory-3.html",
+			 "10. Molecular orbital theory-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/10. Molecular orbital theory-4.html",
+			 "11. Hydrogen bonding-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/11. Hydrogen bonding-1.html",
+			 "11. Hydrogen bonding-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/11. Hydrogen bonding-2.html",
+			 "11. Hydrogen bonding-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/11. Hydrogen bonding-3.html",
+			 "": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/.html",
+			 "": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/.html",
+			 "12. Types of bonding and Forces in solid": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-BONDING/12. Types of bonding and Forces in solid.html"	
+            },
+"Chapter 5 - Thermodynamic": {
+              "1. Basic Concept Of Thermodynamic": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/1. Basic Concept Of Thermodynamic.html",
+			 "2. First law of thermodynamics and Hess law-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/2. First law of thermodynamics and Hess law-1.html",
+			 "2. First law of thermodynamics and Hess law-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/2. First law of thermodynamics and Hess law-2.html",
+			 "3. IInd & IIIrd Law of thermodynamics and Entropy-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/3. IInd & IIIrd Law of thermodynamics and Entropy-1.html",
+			 "3. IInd & IIIrd Law of thermodynamics and Entropy-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/3. IInd & IIIrd Law of thermodynamics and Entropy-2.html",
+			 "3. IInd & IIIrd Law of thermodynamics and Entropy-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/3. IInd & IIIrd Law of thermodynamics and Entropy-3.html",
+			 "4. Heat of reaction-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/4. Heat of reaction-1.html",
+			 "4. Heat of reaction-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/4. Heat of reaction-2.html",
+			 "4. Heat of reaction-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/4. Heat of reaction-3.html",
+			 "4. Heat of reaction-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/4. Heat of reaction-4.html",
+			 "4. Heat of reaction-5": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/4. Heat of reaction-5.html",
+			 "4. Heat of reaction-6": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/4. Heat of reaction-6.html",
+			 "4. Heat of reaction-7": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/4. Heat of reaction-7.html",
+			 "5. Bond energy": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/5. Bond energy.html",
+			 "6. Free energy and Work function": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Thermodynamic/6. Free energy and Work function.html"	
+            },
+	 "Chapter 8 - Chemical equilibrium": {
+              "Coming Soon": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/.html",
+			 "1. Reversible and Irreversible reaction": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/1. Reversible and Irreversible reaction.html",
+			 "2. Equilibrium state": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/2. Equilibrium state.html",
+			 "3. Law of mass action": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/3. Law of mass action.html",
+			 "4. Law of equilibrium and Equilibrium constant-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/4. Law of equilibrium and Equilibrium constant-1.html",
+			 "4. Law of equilibrium and Equilibrium constant-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/4. Law of equilibrium and Equilibrium constant-2.html",
+			 "4. Law of equilibrium and Equilibrium constant-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/4. Law of equilibrium and Equilibrium constant-3.html",
+			 "4. Law of equilibrium and Equilibrium constant-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/4. Law of equilibrium and Equilibrium constant-3.html",
+			 "5. Kp & Kc Relationship and Characteristics of K-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/5. Kp & Kc Relationship and Characteristics of K-1.html",
+			 "5. Kp & Kc Relationship and Characteristics of K-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/5. Kp & Kc Relationship and Characteristics of K-2.html",
+			 "5. Kp & Kc Relationship and Characteristics of K-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/5. Kp & Kc Relationship and Characteristics of K-3.html",
+			 "5. Kp & Kc Relationship and Characteristics of K-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/5. Kp & Kc Relationship and Characteristics of K-4.html",
+			 "6. Activation energy, Standard free energy and Degree of dissociation and Vapour density": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/6. Activation energy, Standard free energy and Degree of dissociation and Vapour density.html",
+			 "7. Le-Chaterlier principle and It’s application-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/7. Le-Chaterlier principle and It’s application-1.html",
+			 "7. Le-Chaterlier principle and It’s application-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/7. Le-Chaterlier principle and It’s application-2.html",
+			 "7. Le-Chaterlier principle and It’s application-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/7. Le-Chaterlier principle and It’s application-3.html",
+			 "7. Le-Chaterlier principle and It’s application-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-EQUI/7. Le-Chaterlier principle and It’s application-4.html"	
+            },
+
+	   "Chapter 2 - Ionic Equilibrium": {
+             "1. Electrical conductors, Arrhenius theory and  Ostwald's dilution law-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/1. Electrical conductors, Arrhenius theory and  Ostwald's dilution law-1.html",
+			"1. Electrical conductors, Arrhenius theory and  Ostwald's dilution law-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/1. Electrical conductors, Arrhenius theory and  Ostwald's dilution law-2.html",
+			"2. Acids and Bases-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/2. Acids and Bases-1.html",
+			"2. Acids and Bases-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/2. Acids and Bases-2.html",
+			"2. Acids and Bases-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/2. Acids and Bases-3.html",
+			"2. Acids and Bases-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/2. Acids and Bases-4.html",
+			"2. Acids and Bases-5": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/2. Acids and Bases-5.html",
+			"2. Acids and Bases-6": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/2. Acids and Bases-6.html",
+			"2. Acids and Bases-7": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/2. Acids and Bases-7.html",
+			"2. Acids and Bases-8": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/2. Acids and Bases-8.html",
+			"2. Acids and Bases-9": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/2. Acids and Bases-9.html",
+			"3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-1.html",
+			"3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-2.html",
+			"3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-3.html",
+			"3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-4.html",
+			"3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-5": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-5.html",
+			"3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-6": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/3. Common ion effect, Isohydric solutions, Solubility product, Ionic product of water and Salt hydrolysis-6.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-1.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-2.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-3.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-4.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-5": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-5.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-6": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-6.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-7": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-7.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-8": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-8.html",
+			 "4. Hydrogen ion concentration- pH scale and Buffer solution-9": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-9.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-10": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-10.html",
+			"4. Hydrogen ion concentration- pH scale and Buffer solution-11": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-IONIC-EQUI/4. Hydrogen ion concentration- pH scale and Buffer solution-11.html"
+			   },
+	 		"Chapter 9 - Redox Reaction": {
+              "1. Oxidation, Reduction-1": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/1. Oxidation, Reduction-1.html",
+			 "1. Oxidation, Reduction-2": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/1. Oxidation, Reduction-2.html",
+			 "2. Oxidizing and Reducing agent-1": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/2. Oxidizing and Reducing agent-1.html",
+			"2. Oxidizing and Reducing agent-2": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/2. Oxidizing and Reducing agent-2.html",
+			"3. Oxidation number and Oxidation state-1": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/3. Oxidation number and Oxidation state-1.html",
+			"3. Oxidation number and Oxidation state-2": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/3. Oxidation number and Oxidation state-2.html",
+			"3. Oxidation number and Oxidation state-3": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/3. Oxidation number and Oxidation state-3.html",
+			"3. Oxidation number and Oxidation state-4": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/3. Oxidation number and Oxidation state-4.html",
+			"3. Oxidation number and Oxidation state-5": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/3. Oxidation number and Oxidation state-5.html",
+			"3. Oxidation number and Oxidation state-6": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/3. Oxidation number and Oxidation state-6.html",
+			"4. Redox reaction and Method for balancing (Redox reaction)-": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/4. Redox reaction and Method for balancing (Redox reaction)-Q.html",
+			"5. Auto oxidation and Disproportionation": "https://chemistry-g10ep.github.io/IIT-JEE-M-REXOX-REACTION/REDOX HTML/5. Auto oxidation and Disproportionation.html"
+			},
+	 	"Chapter 9 - GOC": {
+              "1. Bonding and hybridisation in organic compounds-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/1. Bonding and hybridisation in organic compounds-1.html",
+			 "1. Bonding and hybridisation in organic compounds-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/1. Bonding and hybridisation in organic compounds-2.html",
+			 "1. Bonding and hybridisation in organic compounds-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/1. Bonding and hybridisation in organic compounds-3.html",
+			 "1. Bonding and hybridisation in organic compounds-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/1. Bonding and hybridisation in organic compounds-4.html",
+			 "2. Dipole moment, resonance and reaction intermediates-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/2. Dipole moment, resonance and reaction intermediates-1.html",
+			 "2. Dipole moment, resonance and reaction intermediates-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/2. Dipole moment, resonance and reaction intermediates-2.html",
+			 "2. Dipole moment, resonance and reaction intermediates-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/2. Dipole moment, resonance and reaction intermediates-3.html",
+			 "3. Organic reactions and their mechanism-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/3. Organic reactions and their mechanism-1.html",
+			 "3. Organic reactions and their mechanism-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/3. Organic reactions and their mechanism-2.html",
+			 "4. Structural and stereo isomerism-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/4. Structural and stereo isomerism-1.html",
+			 "4. Structural and stereo isomerism-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/4. Structural and stereo isomerism-2.html",
+			 "4. Structural and stereo isomerism-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/4. Structural and stereo isomerism-3.html",
+			 "4. Structural and stereo isomerism-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/4. Structural and stereo isomerism-4.html",
+			 "4. Structural and stereo isomerism-5": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/4. Structural and stereo isomerism-5.html",
+			 "4. Structural and stereo isomerism-6": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/4. Structural and stereo isomerism-6.html",
+			 "4. Structural and stereo isomerism-7": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/4. Structural and stereo isomerism-7.html",
+			 "4. Structural and stereo isomerism-8": "https://chemistry-g10ep.github.io/IIT-JEE--M--GOC/HTML/4. Structural and stereo isomerism-8.html"	
+            },
+			
+	"Chapter 9 - Hydrocarbon": {
+              "1. Alkane 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/Alkane 01.html",
+			  "2. Alkane 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/Alkane 02.html",
+			  "3. Alkane 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/Alkane 03.html",
+			  "4. Alkane 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/Alkane 04.html",
+			  "5. Alkane 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/Alkane 05.html",
+			  "6. Alkane 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/Alkane 06.html",
+			  "7. Alkane 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/Alkane 07.html",
+			  "8. Alkane 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/Alkane 08.html",
+			  "9. Alkene 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/Alkane 09.html",
+			  "10. Alkene 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/10. Alkene 2.html",
+			  "11. Alkene 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/11. Alkene 2.html",
+			  "12. Alkene 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/12. Alkene 2.html",
+			  "13. Alkene 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/13. Alkene 2.html",
+			  "14. Alkene 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/14. Alkene 2.html",
+			  "15. Alkene 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/15. Alkene 2.html",
+			  "16. Alkene 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/16. Alkene 2.html",
+			  "17. Alkene 1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/17. Alkene 2.html",
+			  "Alkyne Coming soon": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-HYDROCARBON/18. Alkene 2.html",
+			 "Alkene Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/10. Alkene 2.html",
+			 "Alkyne Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"	
+            },	
+	 "Chapter 6 - Solution": {
+              "1. Solubility and Kinds of Solutions": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/1. Solubility and Kinds of Solutions.html",
+			 "2. Methods of Expressing Concentration of Solution(Percentage, wbyw %, wbyv %, vbyv %, vbyw %": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/2. Methods of Expressing Concentration of Solution(Percentage, wbyw %, wbyv %, vbyv %, vbyw %.html",
+			 "3. ppm, ppb, and strength": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/3. ppm, ppb, and strength.html",
+			 "4. Normality (N)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/4. Normality (N).html",
+			 "5. Molarity (M)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/5. Molarity (M).html",
+			 "6. Relation between Molarity and Normality": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/6. Relation between Molarity and Normality.html",
+			 "7. Molality (m)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/7. Molality (m).html",
+			 "8. Relation between Molarity (M) and Molality (m)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/8. Relation between Molarity (M) and Molality (m).html",
+			 "9. Formality (F)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/9. Formality (F).html",
+			 "10. Mole Fraction (X)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/10. Mole Fraction (X).html",
+			 "11. Relation between molality (m) and mole fraction of the solute (Xₐ), Mass Fraction and Demal Unit (D)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/11. Relation between molality (m) and mole fraction of the solute (Xₐ), Mass Fraction and Demal Unit (D).html",
+			 "12. Colligative Property- Lowering of Vapour Pressure": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/12. Colligative Property- Lowering of Vapour Pressure.html",
+			 "13. Ideal and Non-Ideal Solutions, including positive and negative deviations from Raoult’s law": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/13. Ideal and Non-Ideal Solutions, including positive and negative deviations from Raoult’s law.html",
+			 "14. Azeotropic mixtures": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/14. Azeotropic mixtures.html",
+			 "15. Osmosis and Osmotic Pressure": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/15. Osmosis and Osmotic Pressure.html",
+			 "16. Elevation in Boiling Point (Ebullioscopy)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/16. Elevation in Boiling Point (Ebullioscopy).html",
+			 "17. Depression in Freezing Point (Cryoscopy)": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/17. Depression in Freezing Point (Cryoscopy).html",
+			 "18. Colligative properties of electrolytes": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/18. Colligative properties of electrolytes.html",
+			 "19. Abnormal Molecular Masses": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/19. Abnormal Molecular Masses.html",
+			 "20. Van’t Hoff’s Factor ( i )": "https://chemistry-g10ep.github.io/IIT-JEE-E--HTML-Solution/20. Van’t Hoff’s Factor ( i ).html"	
+            },
+            "Chapter 7 - Chemical Kinetics": {
+              "1. Chemical kinetics (Rate of a reaction)-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/1. Chemical kinetics (Rate of a reaction)-1.html",
+			 "1. Chemical kinetics (Rate of a reaction)-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/1. Chemical kinetics (Rate of a reaction)-2.html",
+			 "2. Chemical kinetics (Rate law and Rate constant)-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/2. Chemical kinetics (Rate law and Rate constant)-1.html",
+			 "2. Chemical kinetics (Rate law and Rate constant)-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/2. Chemical kinetics (Rate law and Rate constant)-2.html",
+			 "2. Chemical kinetics (Rate law and Rate constant)-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/2. Chemical kinetics (Rate law and Rate constant)-3.html",
+			 "2. Chemical kinetics (Rate law and Rate constant)-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/2. Chemical kinetics (Rate law and Rate constant)-4.html",
+			 "2. Chemical kinetics (Rate law and Rate constant)-5": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/2. Chemical kinetics (Rate law and Rate constant)-5.html",
+			 "2. Chemical kinetics (Rate law and Rate constant)-6": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/2. Chemical kinetics (Rate law and Rate constant)-6.html",
+			 "2. Chemical kinetics (Rate law and Rate constant)-7": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/2. Chemical kinetics (Rate law and Rate constant)-7.html",
+			 "3. Chemical kinetics (Collision theory, Energy of activation and Arrhenius equation)": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/3. Chemical kinetics (Collision theory, Energy of activation and Arrhenius equation).html",
+			 "4. Chemical kinetics (Photochemical reactions)": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-KINETICS/4. Chemical kinetics (Photochemical reactions).html"	
+            },
+	 "Chapter 8 - Electrochemistry": {
+              "1. Electrolytes and Electrolysis-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/1. Electrolytes and Electrolysis-1.html",
+			 "1. Electrolytes and Electrolysis-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/1. Electrolytes and Electrolysis-2.html",
+			 "2. Faraday's law of electrolysis-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/2. Faraday's law of electrolysis-1.html",
+			 "2. Faraday's law of electrolysis-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/2. Faraday's law of electrolysis-2.html",
+			 "2. Faraday's law of electrolysis-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/2. Faraday's law of electrolysis-3.html",
+			 "2. Faraday's law of electrolysis-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/2. Faraday's law of electrolysis-4.html",
+			 "3. Conductor and conductance": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/3. Conductor and conductance.html",
+			 "4. Cell constant and Electrochemical Cells-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/4. Cell constant and Electrochemical Cells-1.html",
+			 "4. Cell constant and Electrochemical Cells-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/4. Cell constant and Electrochemical Cells-2.html",
+			 "4. Cell constant and Electrochemical Cells-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/4. Cell constant and Electrochemical Cells-3.html",
+			 "5. Electrode potential, ECell, Nernt equation and ECS-1": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/5. Electrode potential, ECell, Nernt equation and ECS-1.html",
+			 "5. Electrode potential, ECell, Nernt equation and ECS-2": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/5. Electrode potential, ECell, Nernt equation and ECS-2.html",
+			 "5. Electrode potential, ECell, Nernt equation and ECS-3": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/5. Electrode potential, ECell, Nernt equation and ECS-3.html",
+			 "5. Electrode potential, ECell, Nernt equation and ECS-4": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/5. Electrode potential, ECell, Nernt equation and ECS-4.html",
+			 "5. Electrode potential, ECell, Nernt equation and ECS-5": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/5. Electrode potential, ECell, Nernt equation and ECS-5.html",
+			 "6. Corrosion": "https://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-Electrochemistry/6. Corrosion.html"	
+            },
+			            "Chapter 9 - Coming Soon": {
+              "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"	
+            },
+			            "Chapter 10 - Coming Soon": {
+              "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"	
+            }
+          },
+	"Topic wise mcq (hard)": {
+   "Chapter 1 - Solution": {
+              "1. A-II": "https://chemistry-g10ep.github.io/IIT-JEE--H--Allen-O-II/solutionAllenO-II.html",
+              "Coming Soon": "https://l-platform.github.io/Class-11-Physics/units-measurements/basic/significant-figures.html",
+			  "Coming Soon": "https://nal-platform.github.io/Class-11-Physics/units-measurements/basic/significant-figures.html"
+            },
+            "Chapter 2 - Chemical Kinetics": {
+              "1. A-II": "https://chemistry-g10ep.github.io/IIT-JEE--H--Allen-O-II/Allen-II-Chemical kinetics.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"
+
+			   },
+			"Chapter 3 - Coming Soon": {
+              "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			  "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+				},
+            "Chapter 4 - Coming Soon": {
+              "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html",
+			 "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"	
+            }
+          },
+	"DPP Question And Solution": {
+            "All Chapter Include": {
+              "All Question, Answerkey and Solution Include ": "https://gten-educational-platform.github.io/Class-12/chemistry dpp solution.html"
+            }
+          },
+"PYQ mains ": {
+            "Some Basic Concept Of Chemistry": {
+              "PYQ-2024": "https://chemistry-g10ep.github.io/PYQ-Some-B-C-of-chemistry/SOME BASIC CONCEPT OF CHEMISTRY PYQ Quiz 2024.html"
+             },
+			"Structure of Atoms": {
+              "PYQ-2024": "https://chemistry-g10ep.github.io/PYQ-Struc-Of-Atoms/STRUCTURE OF ATOM PYQ Quiz 2024.html",
+			  "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"
+				 },
+			"Thermodynamic": {
+              "PYQ-2024": "https://chemistry-g10ep.github.io/PYQ-Thermodynamic/CHEMICAL THERMODYANAMIC pyq 2024.html",
+			  "Coming Soon": "https://gten-educational-plaform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"
+			 },
+			"Equlibrium": {
+              "PYQ-2024": "https://chemistry-g10ep.github.io/PYQ-Equilibrium/EQULIVRIUM PYQ 2024.html",
+			  "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"
+			 },
+			"Solution": {
+              "PYQ-2024": "https://chemistry-g10ep.github.io/PYQ-Solution/SOLUTION PYQ 2024.html",
+			  "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"
+			 },
+			"Haloalkanes and Haloarenes": {
+              "PYQ-2024 cominng soon": "https://chemistry-g10ep.github.io/PYQ-Solution/SOLUTION PYQ 2024.html",
+			  "PYQ-2025": "https://chemistry-g10ep.github.io/PYQ-Halo--Al-Ar/HALO%20ALK%20AND%20ARE-%20PYQ-2025.html"
+			 },
+		"Alcohol, Phenols and ethers": {
+              "PYQ-2024 cominng soon": "https://chemistry-g10ep.github.io/PYQ-Solution/SOLUTION PYQ 2024.html",
+			  "PYQ-2025": "https://chemistry-g10ep.github.io/PYQ-Alol-Ph-Etar/Alcohol phemol and ether pyq-2025.html"
+			 },
+			"Aldehydes, Ketones and Carboxylic Acids": {
+              "PYQ-2024 cominng soon": "https://chemistry-g10ep.gitub.io/PYQ-Solution/SOLUTION PYQ 2024.html",
+			  "PYQ-2025": "https://chemistry-g10ep.github.io/PYQ-Ald-Ket-Car-Acid/Aled-ket-car PYQ-2025.html"
+			 },
+			"Electrochemistry": {
+              "PYQ-2024": "https://chemistry-g10ep.github.io/PYQ-Elec-Chemistry/ELECTROCHEMISTRY PYQ 2024.html",
+			  "Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/motion-1d/basic/uniform-acceleration.html"
+						
+			 }
+          },
+
+"PYQ advance Coming Soon": {
+            "Chapter 1 - Coming Soon": {
+              "2023 Set A Coming Soon": "https://gten-educational-patform.github.io/Class-12/new 7.html",
+              "2022 Set B Coming Soon": "https://gten-educational-platform.github.io/Class-11-Physics/pyq-board/2022-set-b.html"
+    }
+  }
+};
+   
+   
+   
+   
+   
+   
 
 const levelSelect=document.getElementById('levelSelect');
 const chapterSelect=document.getElementById('chapterSelect');
