@@ -358,7 +358,18 @@ async function login(){
 
    const data = await res.json();
 
-// 🔥 ADD THIS BLOCK HERE
+
+
+
+
+
+
+
+
+
+
+
+// 🔥 Change for 365 ADD THIS BLOCK HERE
 if (data.expired) {
   errorBox.innerHTML = `
     Your access has expired (365 days completed).<br><br>
@@ -368,6 +379,10 @@ if (data.expired) {
   `;
   return;
 }
+
+
+
+
 
 
    // ❗ Step 2: Backend validation
@@ -416,7 +431,7 @@ document.getElementById("emailInput").addEventListener("input", function() {
 
 
 
-/* === SESSION VALIDATION === */
+/* === Change for 365 SESSION VALIDATION === */
 window.onload = async function() {
   const email = localStorage.getItem("studentEmail");
   const token = localStorage.getItem("sessionToken");
@@ -448,20 +463,56 @@ window.onload = async function() {
   }
 };
 
-/* === AUTO LOGOUT === */
-setInterval(async()=>{
- const email=localStorage.getItem("studentEmail");
- const token=localStorage.getItem("sessionToken");
- if(!email||!token)return;
- const res=await fetch(`${BACKEND_URL}/validate`,{
-  method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,token})
- });
- const data=await res.json();
- if(!data.valid){
-  alert("⚠️ You have been logged out because this account was opened on another device.");
-  localStorage.clear();location.reload();
- }
-},5000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* === change for 365days === */
+setInterval(async () => {
+  const email = localStorage.getItem("studentEmail");
+  const token = localStorage.getItem("sessionToken");
+
+  if (!email || !token) return;
+
+  const res = await fetch(`${BACKEND_URL}/validate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, token })
+  });
+
+  const data = await res.json();
+
+  // 🔥 HANDLE EXPIRY FIRST
+  if (data.expired) {
+    alert("Your access has expired. Please renew.");
+    localStorage.clear();
+    location.reload();
+    return;
+  }
+
+  // 🔐 HANDLE OTHER DEVICE LOGIN
+  if (!data.valid) {
+    alert("⚠️ You have been logged out because this account was opened on another device.");
+    localStorage.clear();
+    location.reload();
+  }
+}, 5000);
 
 
 
